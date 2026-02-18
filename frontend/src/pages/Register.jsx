@@ -7,21 +7,25 @@ const Register = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     
     const handleRegister = async (e) => {
         e.preventDefault();
         setMessage("");
-        
+        if (password !== confirmPassword) {
+            setMessage("Passwords do not match");
+            setIsError(true);
+            return;
+        }      
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, { 
               name, 
               email, 
               password 
-            });
-            
+            });        
             setMessage(response.data.message || "Registration successful!");
             setIsError(false);
             setTimeout(() => {
@@ -46,14 +50,13 @@ const Register = () => {
               <Typography variant="h4" align="center" sx={{ mb: 3 }}>
                 Create Employee Account
               </Typography>
-              
+                           
               {message && (
                 <Alert severity={isError ? "error" : "success"} sx={{ mb: 2 }}>
                   {message}
                 </Alert>
               )}
-
-              <form onSubmit={handleRegister}>
+             <form onSubmit={handleRegister}>
                 <TextField
                   fullWidth
                   type="text"
@@ -63,8 +66,7 @@ const Register = () => {
                   required
                   margin="normal"
                   autoComplete="name"
-                />
-                
+                />                
                 <TextField
                   fullWidth
                   type="email"
@@ -74,8 +76,7 @@ const Register = () => {
                   required
                   margin="normal"
                   autoComplete="email"
-                />
-                
+                />                
                 <TextField
                   fullWidth
                   type="password"
@@ -85,9 +86,20 @@ const Register = () => {
                   required
                   margin="normal"
                   autoComplete="new-password"
-                />
-                
-                <Button 
+                />               
+                <TextField
+                  fullWidth
+                  type="password"
+                  label="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  margin="normal"
+                  autoComplete="new-password"
+                  error={confirmPassword !== "" && password !== confirmPassword}
+                  helperText={confirmPassword !== "" && password !== confirmPassword ? "Passwords do not match" : ""}
+                />               
+                <Button
                   type="submit" 
                   variant="contained" 
                   fullWidth 

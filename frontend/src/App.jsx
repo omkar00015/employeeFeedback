@@ -1,9 +1,7 @@
 import {Routes, Route, Navigate, BrowserRouter} from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
-// import Dashboard from "./pages/Dashboard";
-// import AdminDashboard from "./pages/AdminDashboard";
-// import EmployeeDashboard from "./pages/EmployeeDashboard";
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const role = localStorage.getItem("role");
@@ -13,9 +11,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/employee" element={<EmployeeDashboard />} /> */}
+        {role === 'admin' && <Route path="/admin" element={<AdminDashboard />} />}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>

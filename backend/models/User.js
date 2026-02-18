@@ -14,6 +14,9 @@ const userSchema = new Mangoose.Schema({
         type: String,
         required: true
     },
+    designation: {
+        type: String,
+    },
     role: {
         type: String,
         enum: ['employee', 'admin'],   
